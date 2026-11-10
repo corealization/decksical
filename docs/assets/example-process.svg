@@ -1,0 +1,28 @@
+<!--
+Copyright (c) 2026 Alex Voss
+SPDX-License-Identifier: MIT
+Licensed under the MIT license. See LICENSE in the project root.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">From Markdown to presentation</title>
+  <desc id="desc">Three connected steps: write Markdown, build with Zensical, and present slides.</desc>
+  <rect width="960" height="540" rx="24" fill="#eef2ff"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle" fill="#172554">
+    <text x="480" y="100" font-size="36" font-weight="700">From Markdown to presentation</text>
+    <g fill="#fff" stroke="#4f46e5" stroke-width="3">
+      <rect x="60" y="190" width="240" height="160" rx="16"/>
+      <rect x="360" y="190" width="240" height="160" rx="16"/>
+      <rect x="660" y="190" width="240" height="160" rx="16"/>
+    </g>
+    <g font-size="28" font-weight="600">
+      <text x="180" y="280">Markdown</text>
+      <text x="480" y="280">Zensical</text>
+      <text x="780" y="280">Slides</text>
+    </g>
+    <text x="480" y="440" font-size="24">Write → Build → Present</text>
+  </g>
+  <g fill="none" stroke="#4f46e5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M310 270h40m-12-12 12 12-12 12"/>
+    <path d="M610 270h40m-12-12 12 12-12 12"/>
+  </g>
+</svg>

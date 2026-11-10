@@ -1,0 +1,61 @@
+[project]
+name = "decksical"
+version = "0.1.0"
+description = "A Zensical theme for Markdown-authored presentation slides"
+keywords = ["zensical", "slides", "presentations", "markdown", "theme"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Text Processing :: Markup :: Markdown",
+]
+authors = [
+    { name = "Alex Voss", email = "alex@corealization.com" }
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11"
+
+urls.Repository = "https://github.com/corealization/decksical"
+urls.Documentation = "https://corealization.github.io/decksical/"
+urls.Issues = "https://github.com/corealization/decksical/issues"
+
+dependencies = [
+    "zensical>=0.1.0",
+]
+
+[project.optional-dependencies]
+catppuccin = ["catppuccin-zensical>=0.3.0"]
+
+[project.entry-points."mkdocs.themes"]
+decksical = "decksical"
+decksical-catppuccin = "decksical.catppuccin"
+
+[dependency-groups]
+dev = [
+    "hatchling>=1.32.4",
+    "playwright>=1.63.0",
+    "ruff>=0.16.10",
+    "ty>=0.0.84",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/decksical"]
+
+# Copy theme files to the correct locations for Catppuccin in the wheel file.
+[tool.hatch.build.targets.wheel.force-include]
+"src/decksical/assets" = "decksical/catppuccin/assets"
+"src/decksical/partials" = "decksical/catppuccin/partials"
+"src/decksical/shared" = "decksical/catppuccin/shared"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B", "UP"]

@@ -1,0 +1,43 @@
+---
+template: slide.html
+---
+
+# Image on the left
+
+![Fixture image](../assets/diagram.svg)
+
+<!-- column-break -->
+
+## Text column
+
+- Ordinary **Markdown** text.
+- A second bullet.
+
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+Long text must stay in its own column. Long text must stay in its own column.
+{: #long-column-text }
+
+??? notes "Speaker notes"
+
+    - Fixture note one.
+    - Fixture note two.
+
+    Extra fixture notes.

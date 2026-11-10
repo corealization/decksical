@@ -1,0 +1,16 @@
+<div class="md-copyright">
+  {% if config.copyright %}
+    <div class="md-copyright__highlight">
+      {{ config.copyright }}
+    </div>
+  {% endif %}
+  <div class="md-copyright__highlight">
+    {% if not config.extra.generator == false %}
+      Built with <a href="https://zensical.org/" target="_blank" rel="noopener">Zensical</a> ·
+    {% endif %}
+    {% if config.theme.name == "decksical-catppuccin" and not (config.extra.catppuccin and config.extra.catppuccin.signature == false) %}
+      Styled with <a href="https://jonathan343.github.io/catppuccin-zensical/" target="_blank" rel="noopener">Catppuccin</a> ·
+    {% endif %}
+    slides by <a href="https://github.com/corealization/decksical" target="_blank" rel="noopener">Decksical</a>
+  </div>
+</div>

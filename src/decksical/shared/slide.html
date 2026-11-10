@@ -1,0 +1,111 @@
+{#
+Copyright (c) 2026 Alex Voss
+SPDX-License-Identifier: MIT
+Licensed under the MIT license. See LICENSE in the project root.
+#}
+
+{% extends "base.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ 'assets/slides/slides.css' | url }}">
+{% endblock %}
+
+{% block content %}
+  {# A slide duration overrides the nearest ancestor index page's deck default.
+     The nested namespace leaves room for more Decksical playback options. #}
+  {% set playback = namespace(duration=none) %}
+  {% set slide_options = page.meta.decksical | default(none) %}
+  {% if slide_options is not none %}
+    {% set slide_autoplay = slide_options.autoplay | default(none) %}
+    {% if slide_autoplay is not none %}
+      {% set playback.duration = slide_autoplay.duration | default(none) %}
+    {% endif %}
+  {% endif %}
+  {% if playback.duration is none %}
+    {% for ancestor in page.ancestors %}
+      {% for child in ancestor.children %}
+        {% if playback.duration is none and child.is_index and child.meta.template != "slide.html" %}
+          {% set deck_options = child.meta.decksical | default(none) %}
+          {% if deck_options is not none %}
+            {% set deck_autoplay = deck_options.autoplay | default(none) %}
+            {% if deck_autoplay is not none %}
+              {% set deck_duration = deck_autoplay.duration | default(none) %}
+              {% if deck_duration is not none %}
+                {% set playback.duration = deck_duration %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+  {% set wrap = namespace(enabled=false, first_slide=none, deck_found=false) %}
+  {% for ancestor in page.ancestors %}
+    {% for child in ancestor.children %}
+      {% if not wrap.deck_found and child.is_index and child.meta.template != "slide.html" %}
+        {% set deck_options = child.meta.decksical | default(none) %}
+        {% if deck_options is not none %}
+          {% set deck_autoplay = deck_options.autoplay | default(none) %}
+          {% if deck_autoplay is not none %}
+            {% set wrap.deck_found = true %}
+            {% set wrap.enabled = deck_autoplay.wrap | default(false) %}
+            {% if wrap.enabled %}
+              {% for sibling in ancestor.children %}
+                {% if wrap.first_slide is none and sibling.meta.template == "slide.html" %}
+                  {% set wrap.first_slide = sibling.url %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  <section
+    class="slide{% if playback.duration is not none %} slide--autoplay{% endif %}"
+    aria-label="Slide"
+    data-autoplay-duration="{{ playback.duration if playback.duration is not none else '' }}"
+  >
+    {% if wrap.enabled and wrap.first_slide is not none %}
+      <a class="slide__autoplay-wrap" href="{{ wrap.first_slide | url }}" hidden tabindex="-1" aria-hidden="true"></a>
+    {% endif %}
+    <div class="slide__content">
+      {% block slide_content %}
+        {% include "partials/slides/content.html" %}
+      {% endblock %}
+    </div>
+    <button
+      class="slide__playback-toggle"
+      type="button"
+      aria-label="Pause automatic playback"
+      title="Pause automatic playback"
+      hidden
+    >
+      <span class="md-icon" data-playback-icon="pause" aria-hidden="true">{% include ".icons/lucide/pause.svg" %}</span>
+      <span class="md-icon" data-playback-icon="play" aria-hidden="true" hidden>{% include ".icons/lucide/play.svg" %}</span>
+    </button>
+  </section>
+  {% block slide_scripts %}
+    <script type="module" src="{{ 'assets/slides/slides.mjs' | url }}"></script>
+  {% endblock %}
+{% endblock %}
+
+{% block footer %}
+  {% set hide_navigation_until_hover = false %}
+  {% set extra_options = config.extra | default(none) %}
+  {% if extra_options is not none %}
+    {% set decksical_options = extra_options.decksical | default(none) %}
+    {% if decksical_options is not none %}
+      {% set navigation_options = decksical_options.navigation | default(none) %}
+      {% if navigation_options is not none %}
+        {% set hide_navigation_until_hover = navigation_options.hide_until_hover | default(false) %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+  <footer class="slide__footer{% if hide_navigation_until_hover %} slide__footer--hide-until-hover{% endif %}">
+    {% block slide_navigation %}
+      {% include "partials/slides/navigation.html" %}
+    {% endblock %}
+  </footer>
+{% endblock %}

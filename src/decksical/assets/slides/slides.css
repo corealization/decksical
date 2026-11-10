@@ -1,0 +1,341 @@
+/*
+Copyright (c) 2026 Alex Voss
+SPDX-License-Identifier: MIT
+Licensed under the MIT license. See LICENSE in the project root.
+*/
+
+/*
+Slide layout:
+- Scope presentation styles to slide pages; hide documentation controls there.
+- Scale text with the smaller viewport dimension so short screens stay usable.
+- Center content and navigation within an 80rem maximum width.
+- Reserve up to 75dvh for slide content after allowing for page padding and
+  navigation. Longer content and visible notes can grow and scroll normally.
+- Use two equal grid columns, stacking them below 48rem in source order.
+- Fit images within the available slide area without cropping or distortion.
+- Hide notes until enabled; preserve their visibility and omit navigation when printing.
+*/
+
+/* Turn Zensical page elements off for slides. */
+/* ------------------------------------------- */
+
+body:has(.slide) {
+  --slide-padding: clamp(1rem, 4vw, 4rem);
+  --slide-available-height: calc(
+    100dvh - var(--slide-padding) - var(--slide-padding) - 3rem
+  );
+}
+
+body:has(.slide--autoplay) {
+  --slide-available-height: calc(
+    100dvh - var(--slide-padding) - var(--slide-padding) - 6rem
+  );
+}
+
+body:has(.slide) .md-header,
+body:has(.slide) .md-tabs,
+body:has(.slide) .md-sidebar,
+body:has(.slide) .md-footer,
+body:has(.slide) .md-path,
+body:has(.slide) .md-top {
+  display: none;
+}
+
+/* Slide page layout */
+/* ----------------- */
+
+body:has(.slide) .md-main__inner {
+  margin-block: 0;
+  max-width: 100%;
+}
+
+body:has(.slide) .md-content {
+  min-width: 0;
+  width: 100%;
+}
+
+body:has(.slide) .md-content__inner {
+  margin: 0;
+  padding: var(--slide-padding);
+  padding-block-end: 0;
+}
+
+.slide {
+  max-width: 80rem;
+  margin-inline: auto;
+  font-size: clamp(1rem, min(2vw, 3vh), 2rem);
+}
+
+.slide__content {
+  display: flow-root;
+  min-height: min(75dvh, var(--slide-available-height));
+  overflow-wrap: anywhere;
+}
+
+.slide--autoplay .slide__content {
+  padding-block-start: 3rem;
+}
+
+/* Title slides */
+/* ------------ */
+
+.slide:has(.decksical-title-logo) .slide__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.slide:has(.decksical-title-logo) .slide__content > h1 {
+  margin: 0;
+}
+
+.slide__content > p:has(> .decksical-title-logo) {
+  margin: 0 0 2rem;
+}
+
+.slide img.decksical-title-logo {
+  display: block;
+  width: clamp(8rem, 20vw, 15rem);
+  height: auto;
+}
+
+.decksical-title-tagline {
+  max-width: 42ch;
+  margin: 0.15em 0 0;
+  text-align: center;
+}
+
+/* Format headings */
+/* --------------- */
+
+.slide__content > h1 {
+  color: var(--md-default-fg-color);
+  font-size: clamp(2rem, min(4vw, 6vh), 4rem);
+}
+
+.slide__content mjx-container[display="true"] {
+  display: block;
+  margin-block: clamp(1rem, 3vh, 1.5rem);
+  font-size: clamp(1.5rem, min(3vw, 5vh), 3rem);
+  text-align: center;
+}
+
+.slide .admonition {
+  font-size: inherit;
+  line-height: 1.2;
+}
+
+.slide .admonition > .admonition-title {
+  padding-inline-start: calc(1em + 1.5rem);
+}
+
+.slide .admonition > .admonition-title::before {
+  top: 50%;
+  width: 1em;
+  height: 1em;
+  transform: translateY(-50%);
+}
+
+.slide .headerlink {
+  display: none;
+}
+
+/* Full-size images */
+/* ---------------- */
+
+.slide img.slide-image {
+  display: block;
+  width: 100%;
+  height: min(75dvh, var(--slide-available-height));
+  object-fit: contain;
+}
+
+/* Two-column layouts */
+/* ------------------ */
+
+.slide__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 3rem);
+}
+
+.slide__column {
+  min-width: 0;
+  display: flow-root;
+}
+
+.slide__column > :first-child {
+  margin-block-start: 0;
+}
+
+.slide__column img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(75dvh, var(--slide-available-height));
+  object-fit: contain;
+}
+
+@media (max-width: 48rem) {
+  .slide__columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Speaker notes */
+/* ------------- */
+
+.slide__content > details.notes {
+  margin-top: 3rem;
+  font-size: 1rem;
+}
+
+.slide:not(.slide--notes-visible) details.notes {
+  display: none;
+}
+
+/* Slide navigation */
+.slide__footer {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 10;
+  padding: 0 var(--slide-padding) var(--slide-padding);
+  pointer-events: none;
+}
+
+.slide__footer--hide-until-hover .slide__navigation {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.slide__footer--hide-until-hover .slide__navigation a {
+  pointer-events: none;
+}
+
+.slide__footer--hide-until-hover .slide__navigation:hover,
+.slide__footer--hide-until-hover .slide__navigation:focus-within {
+  opacity: 1;
+}
+
+.slide__footer--hide-until-hover .slide__navigation:hover a,
+.slide__footer--hide-until-hover .slide__navigation:focus-within a {
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .slide__footer--hide-until-hover .slide__navigation {
+    opacity: 1;
+    transition: none;
+  }
+
+  .slide__footer--hide-until-hover .slide__navigation a {
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide__footer--hide-until-hover .slide__navigation {
+    transition: none;
+  }
+}
+
+.slide__navigation {
+  max-width: 80rem;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  font-size: 1rem;
+  pointer-events: auto;
+}
+
+.slide__navigation a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .75rem;
+  border-radius: .25rem;
+  background: color-mix(in srgb, var(--md-default-bg-color) 75%, transparent);
+  color: var(--md-default-fg-color);
+}
+
+.slide__navigation a[rel="next"] {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.slide__navigation a[rel="prev"] {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+
+.slide__navigation .slide__overview {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.slide__navigation a:hover,
+.slide__navigation a:focus-visible {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.slide__navigation svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Automatic playback controls */
+/* ---------------------------- */
+
+.slide__playback-toggle {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+  z-index: 11;
+  display: grid;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--md-default-bg-color) 55%, transparent);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+}
+
+.slide__playback-toggle:hover,
+.slide__playback-toggle:focus-visible {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.slide__playback-toggle[hidden],
+.slide__playback-toggle [hidden] {
+  display: none;
+}
+
+.slide__playback-toggle svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Printing */
+/* -------- */
+
+@media print {
+  .slide__content { min-height: 0; }
+  .slide--autoplay .slide__content { padding-block-start: 0; }
+  .slide__navigation { display: none; }
+  .slide__playback-toggle { display: none; }
+
+  .slide img.slide-image,
+  .slide__column img {
+    height: auto;
+    max-height: none;
+  }
+}

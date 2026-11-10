@@ -1,0 +1,9 @@
+# Copyright (c) 2026 Alex Voss
+# SPDX-License-Identifier: MIT
+# Licensed under the MIT license. See LICENSE in the project root.
+
+# Zensical retains the theme name "material" for compatibility with existing
+# theme extensions, so we use this name here. 
+#
+# See https://zensical.org/docs/customization/#theme-configuration
+extends: material

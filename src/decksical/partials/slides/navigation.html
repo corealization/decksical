@@ -1,0 +1,60 @@
+{#
+Copyright (c) 2026 Alex Voss
+SPDX-License-Identifier: MIT
+Licensed under the MIT license. See LICENSE in the project root.
+#}
+
+<nav class="slide__navigation" aria-label="Slide navigation">
+  {# Values assigned inside a Jinja loop do not remain available after it, so
+     the loop updates these namespace attributes instead. After the loop,
+     slides.previous and slides.next hold adjacent navigation entries, or stay
+     none at a section boundary. They are candidates and may not be slides. #}
+  {% set slides = namespace(previous=none, next=none) %}
+  {# Search the current page's immediate navigation parent. This assumes the
+     current page appears among its children by URL, in presentation order. #}
+  {% if page.ancestors %}
+    {% set siblings = page.ancestors[0].children %}
+    {% for child in siblings %}
+      {% if child.url == page.url %}
+        {% if not loop.first %}{% set slides.previous = siblings[loop.index0 - 1] %}{% endif %}
+        {% if not loop.last %}{% set slides.next = siblings[loop.index0 + 1] %}{% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {# Output: overview.page is the nearest non-slide index page among the
+     ancestors, or none if no such page exists. The namespace carries the
+     first match out of the loops; this assumes ancestors are nearest-first. #}
+  {% set overview = namespace(page=none) %}
+  {% for ancestor in page.ancestors %}
+    {% for child in ancestor.children %}
+      {% if overview.page is none and child.is_index and child.meta.template != "slide.html" %}
+        {% set overview.page = child %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {# Render adjacent entries only when their template marks them as slides;
+     ordinary pages and nested sections therefore stop deck navigation. #}
+  {% if slides.previous and slides.previous.meta.template == "slide.html" %}
+    <a href="{{ slides.previous.url | url }}" rel="prev" aria-label="Previous slide" title="Previous slide" aria-keyshortcuts="ArrowLeft">
+      <span class="md-icon" aria-hidden="true">{% include ".icons/lucide/arrow-left.svg" %}</span>
+    </a>
+  {% endif %}
+  {% if overview.page %}
+    <a
+      class="slide__overview"
+      href="{{ overview.page.url | url }}"
+      aria-label="Deck overview"
+      title="Deck overview"
+      aria-keyshortcuts="Escape"
+    >
+      <span class="md-icon" aria-hidden="true">{% include ".icons/lucide/arrow-up.svg" %}</span>
+    </a>
+  {% endif %}
+  {% if slides.next and slides.next.meta.template == "slide.html" %}
+    <a href="{{ slides.next.url | url }}" rel="next" aria-label="Next slide" title="Next slide" aria-keyshortcuts="ArrowRight">
+      <span class="md-icon" aria-hidden="true">{% include ".icons/lucide/arrow-right.svg" %}</span>
+    </a>
+  {% endif %}
+</nav>

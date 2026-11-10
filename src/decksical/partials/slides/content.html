@@ -1,0 +1,32 @@
+{#
+Copyright (c) 2026 Alex Voss
+SPDX-License-Identifier: MIT
+Licensed under the MIT license. See LICENSE in the project root.
+#}
+
+{# page.content is rendered HTML. Split at the first marker; assumes a slide 
+has at most one column-break marker. #}
+{% set columns = page.content | split('<!-- column-break -->', 1) | list %}
+{% if columns | length == 2 %}
+  {% set left = columns[0] %}
+  {# Keep an initial H1 above the grid so it spans both columns. This assumes
+     the optional H1 is the first element on the left side. #}
+  {% if (left | trim)[:3] == '<h1' %}
+    {% set title = left | split('</h1>', 1) | list %}
+    {{ (title[0] ~ "</h1>") | safe }}
+    {% set left = title[1] %}
+  {% endif %}
+  {# Keep speaker notes below the grid so they span both columns. This assumes
+     notes use this exact opening tag and appear at the end of the right side. #}
+  {% set right = columns[1] | split('<details class="notes">', 1) | list %}
+  <div class="slide__columns">
+    <div class="slide__column">{{ left | safe }}</div>
+    <div class="slide__column">{{ right[0] | safe }}</div>
+  </div>
+  {% if right | length == 2 %}
+    {{ ('<details class="notes">' ~ right[1]) | safe }}
+  {% endif %}
+{% else %}
+  {# Without the marker, leave the rendered content unchanged. #}
+  {{ page.content | safe }}
+{% endif %}

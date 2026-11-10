@@ -1,0 +1,32 @@
+[project]
+site_name = "Slide test fixtures"
+nav = [
+  { "Home" = "index.md" },
+  { "Fixture deck" = [
+    { "Overview" = "deck/index.md" },
+    { "First" = "deck/first.md" },
+    { "Plain" = "deck/plain.md" },
+    { "Image" = "deck/image.md" },
+    { "Image left" = "deck/image-left.md" },
+    { "Image right" = "deck/image-right.md" },
+    { "Columns" = "deck/columns.md" },
+    { "Notes" = "deck/notes.md" },
+  ] },
+  { "Overflow" = ["overflow/index.md", "overflow/long.md"] },
+  { "Other deck" = ["other/first.md", "other/second.md"] },
+]
+
+[project.theme]
+name = "decksical"
+font = false
+custom_dir = "overrides"
+features = ["navigation.instant", "navigation.indexes"]
+
+[project.markdown_extensions]
+attr_list = {}
+toc.permalink = true
+pymdownx.details = {}
+pymdownx.superfences = {}
+
+[project.plugins.search]
+enabled = false
