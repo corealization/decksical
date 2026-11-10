@@ -94,7 +94,7 @@ The Python checks workflow runs both commands on pushes to `main`.
 
 ## Prepare a release
 
-Set `version` in `pyproject.toml`, update `uv.lock`, and merge the changes. Publish a GitHub release with a matching tag, such as `v0.1.0`. The release workflow builds the wheel, checks its packaged resources, and attaches it to the release. Publish the package to PyPI separately when ready.
+Set `version` in `pyproject.toml`, update `uv.lock`, and merge the changes. Push a matching tag, such as `v0.1.0`. The release workflow builds and checks the wheel, then creates a draft GitHub release with the wheel attached. Review the draft and publish it when ready. Publish the package to PyPI separately.
 
 ## GitHub Actions
 
