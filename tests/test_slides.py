@@ -550,12 +550,11 @@ class SlideTests(unittest.TestCase):
             else:
                 expect(catppuccin_credit).to_have_count(0)
 
-            if self.theme_name == "decksical-catppuccin":
-                expect(page.locator('head link[href$="/catppuccin.css"]')).to_have_count(1)
-
             page.goto(f"{base_url}/example/image/", wait_until="networkidle")
             expect(page.locator(".slide__content")).to_be_visible()
             expect(page.locator(".md-header")).to_be_hidden()
+            if self.theme_name == "decksical-catppuccin":
+                expect(page.locator('head link[href$="/catppuccin.css"]')).to_have_count(1)
 
             image = page.locator("img.slide-image")
             expect(image).to_be_visible()
