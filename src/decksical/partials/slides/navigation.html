@@ -5,6 +5,7 @@ Licensed under the MIT license. See LICENSE in the project root.
 #}
 
 <nav class="slide__navigation" aria-label="Slide navigation">
+  {% set slide_templates = ["slide.html", "slide-title.html"] %}
   {# Values assigned inside a Jinja loop do not remain available after it, so
      the loop updates these namespace attributes instead. After the loop,
      slides.previous and slides.next hold adjacent navigation entries, or stay
@@ -28,7 +29,7 @@ Licensed under the MIT license. See LICENSE in the project root.
   {% set overview = namespace(page=none) %}
   {% for ancestor in page.ancestors %}
     {% for child in ancestor.children %}
-      {% if overview.page is none and child.is_index and child.meta.template != "slide.html" %}
+      {% if overview.page is none and child.is_index and child.meta.template not in slide_templates %}
         {% set overview.page = child %}
       {% endif %}
     {% endfor %}
@@ -36,7 +37,7 @@ Licensed under the MIT license. See LICENSE in the project root.
 
   {# Render adjacent entries only when their template marks them as slides;
      ordinary pages and nested sections therefore stop deck navigation. #}
-  {% if slides.previous and slides.previous.meta.template == "slide.html" %}
+  {% if slides.previous and slides.previous.meta.template in slide_templates %}
     <a href="{{ slides.previous.url | url }}" rel="prev" aria-label="Previous slide" title="Previous slide" aria-keyshortcuts="ArrowLeft">
       <span class="md-icon" aria-hidden="true">{% include ".icons/lucide/arrow-left.svg" %}</span>
     </a>
@@ -52,7 +53,7 @@ Licensed under the MIT license. See LICENSE in the project root.
       <span class="md-icon" aria-hidden="true">{% include ".icons/lucide/arrow-up.svg" %}</span>
     </a>
   {% endif %}
-  {% if slides.next and slides.next.meta.template == "slide.html" %}
+  {% if slides.next and slides.next.meta.template in slide_templates %}
     <a href="{{ slides.next.url | url }}" rel="next" aria-label="Next slide" title="Next slide" aria-keyshortcuts="ArrowRight">
       <span class="md-icon" aria-hidden="true">{% include ".icons/lucide/arrow-right.svg" %}</span>
     </a>

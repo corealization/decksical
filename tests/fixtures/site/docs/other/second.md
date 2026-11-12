@@ -1,7 +1,7 @@
 ---
-template: slide.html
+template: slide-title.html
 ---
 
 # Other deck second
 
-End of the other deck.
+![Fixture image](../assets/title-image.svg)

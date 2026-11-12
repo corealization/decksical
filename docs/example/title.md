@@ -1,5 +1,5 @@
 ---
-template: slide.html
+template: slide-title.html
 decksical:
   autoplay:
     duration: 10

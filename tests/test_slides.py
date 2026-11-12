@@ -734,6 +734,43 @@ class SlideTests(unittest.TestCase):
                 self.assert_shortcut_ignored(page, key)
                 expect(page).to_have_url(f"{self.base_url}/{path}")
 
+    # The title slide template centers the title without requiring a logo or tagline.
+    def test_title_slide_centers_content_without_resizing_image(self) -> None:
+        with self.page("other/second/") as page:
+            slide = page.locator(".slide")
+            content = slide.locator(".slide__content")
+            heading = content.get_by_role("heading", name="Other deck second", exact=True)
+            image = content.locator("img")
+
+            expect(slide).to_have_class(re.compile(r"(?:^|\s)slide--titlepage(?:\s|$)"))
+            expect(content.locator(".decksical-title-tagline")).to_have_count(0)
+            expect(content.locator(".decksical-title-logo")).to_have_count(0)
+
+            self.assertEqual(content.evaluate("el => getComputedStyle(el).display"), "flex")
+            self.assertEqual(content.evaluate("el => getComputedStyle(el).alignItems"), "center")
+            self.assertEqual(content.evaluate("el => getComputedStyle(el).justifyContent"), "center")
+            self.assertEqual(content.evaluate("el => getComputedStyle(el).textAlign"), "center")
+
+            content_box = self.visible_box(content)
+            heading_box = self.visible_box(heading)
+            self.assertAlmostEqual(
+                heading_box["x"] + heading_box["width"] / 2,
+                content_box["x"] + content_box["width"] / 2,
+                delta=1,
+            )
+
+            expect(image).to_be_visible()
+            self.assertTrue(image.evaluate("el => el.complete && el.naturalWidth > 0"))
+            self.assertEqual(image.evaluate("el => el.width"), image.evaluate("el => el.naturalWidth"))
+
+    # The title slide template participates in deck navigation like a regular slide.
+    def test_title_slide_participates_in_slide_navigation(self) -> None:
+        with self.page("other/second/") as page:
+            previous = page.get_by_role("link", name="Previous slide", exact=True)
+            expect(previous).to_have_attribute("href", re.compile(r"/other/first/$"))
+            page.keyboard.press("ArrowLeft")
+            expect(page).to_have_url(f"{self.base_url}/other/first/")
+
     # A deck without an index page has no overview control.
     def test_overview_omitted_without_index(self) -> None:
         with self.page("other/first/") as page:

@@ -26,23 +26,21 @@ documentation pages or nested sections. A nested section defines a separate deck
 
 ## Title slide
 
-Decksical includes a centered layout for title slides. Add a logo with the
-`.decksical-title-logo` class to activate it. The layout centers the logo and
-heading vertically and horizontally. Add an optional tagline with the
-`.decksical-title-tagline` class:
+Use `slide-title.html` for a title slide. It centers the content vertically
+and horizontally. Images keep their normal size unless your site styles them.
+A logo and tagline are optional:
 
 ```
-![Project logo](images/logo.svg){ .decksical-title-logo }
+---
+template: slide-title.html
+---
+
+![Project logo](images/logo.svg)
 
 # Project name
 
 A short tagline
-{ .decksical-title-tagline }
 ```
-
-Use a logo to activate the layout and add a heading for the title. The tagline
-is optional. The example uses [attribute lists](#arrange-images-and-text) to
-add the classes.
 
 ## Add code
 

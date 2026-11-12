@@ -1,5 +1,5 @@
 [project]
-site_url = "https://corealization.github.io/decksical/"
+site_url = "https://decksical.corealization.com"
 site_name = "Decksical"
 site_description = "A simple Zensical theme for authoring presentation slides as Markdown files"
 site_author = "Alex Voss"

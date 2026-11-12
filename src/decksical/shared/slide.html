@@ -25,7 +25,7 @@ Licensed under the MIT license. See LICENSE in the project root.
   {% if playback.duration is none %}
     {% for ancestor in page.ancestors %}
       {% for child in ancestor.children %}
-        {% if playback.duration is none and child.is_index and child.meta.template != "slide.html" %}
+        {% if playback.duration is none and child.is_index and child.meta.template not in ["slide.html", "slide-title.html"] %}
           {% set deck_options = child.meta.decksical | default(none) %}
           {% if deck_options is not none %}
             {% set deck_autoplay = deck_options.autoplay | default(none) %}
@@ -43,7 +43,7 @@ Licensed under the MIT license. See LICENSE in the project root.
   {% set wrap = namespace(enabled=false, first_slide=none, deck_found=false) %}
   {% for ancestor in page.ancestors %}
     {% for child in ancestor.children %}
-      {% if not wrap.deck_found and child.is_index and child.meta.template != "slide.html" %}
+      {% if not wrap.deck_found and child.is_index and child.meta.template not in ["slide.html", "slide-title.html"] %}
         {% set deck_options = child.meta.decksical | default(none) %}
         {% if deck_options is not none %}
           {% set deck_autoplay = deck_options.autoplay | default(none) %}
@@ -52,7 +52,7 @@ Licensed under the MIT license. See LICENSE in the project root.
             {% set wrap.enabled = deck_autoplay.wrap | default(false) %}
             {% if wrap.enabled %}
               {% for sibling in ancestor.children %}
-                {% if wrap.first_slide is none and sibling.meta.template == "slide.html" %}
+                {% if wrap.first_slide is none and sibling.meta.template in ["slide.html", "slide-title.html"] %}
                   {% set wrap.first_slide = sibling.url %}
                 {% endif %}
               {% endfor %}
@@ -63,7 +63,7 @@ Licensed under the MIT license. See LICENSE in the project root.
     {% endfor %}
   {% endfor %}
   <section
-    class="slide{% if playback.duration is not none %} slide--autoplay{% endif %}"
+    class="{% block slide_classes %}slide{% endblock %}{% if playback.duration is not none %} slide--autoplay{% endif %}"
     aria-label="Slide"
     data-autoplay-duration="{{ playback.duration if playback.duration is not none else '' }}"
   >

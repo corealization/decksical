@@ -79,7 +79,7 @@ body:has(.slide) .md-content__inner {
 /* Title slides */
 /* ------------ */
 
-.slide:has(.decksical-title-logo) .slide__content {
+.slide--titlepage .slide__content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,24 +87,8 @@ body:has(.slide) .md-content__inner {
   text-align: center;
 }
 
-.slide:has(.decksical-title-logo) .slide__content > h1 {
+.slide--titlepage .slide__content > h1 {
   margin: 0;
-}
-
-.slide__content > p:has(> .decksical-title-logo) {
-  margin: 0 0 2rem;
-}
-
-.slide img.decksical-title-logo {
-  display: block;
-  width: clamp(8rem, 20vw, 15rem);
-  height: auto;
-}
-
-.decksical-title-tagline {
-  max-width: 42ch;
-  margin: 0.15em 0 0;
-  text-align: center;
 }
 
 /* Format headings */

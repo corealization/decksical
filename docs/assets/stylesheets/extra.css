@@ -29,3 +29,20 @@
   font-size: 1.15rem;
 }
 
+/* Example title-slide logo and tagline styles; Decksical itself only centers. */
+.slide--titlepage .slide__content > p:has(> img.decksical-title-logo) {
+  margin: 0 0 2rem;
+}
+
+.slide--titlepage img.decksical-title-logo {
+  display: block;
+  width: clamp(8rem, 20vw, 15rem);
+  height: auto;
+}
+
+.slide--titlepage .decksical-title-tagline {
+  max-width: 42ch;
+  margin: 0.15em 0 0;
+  text-align: center;
+}
+
