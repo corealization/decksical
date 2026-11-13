@@ -1,6 +1,6 @@
 [project]
 name = "decksical"
-version = "0.1.2"
+version = "0.1.3"
 description = "A Zensical theme for Markdown-authored presentation slides"
 keywords = ["zensical", "slides", "presentations", "markdown", "theme"]
 classifiers = [
