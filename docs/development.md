@@ -98,12 +98,12 @@ The Python checks workflow runs both commands on pushes to `main`.
 
 2. Commit both files, merge the change to `main`, and make sure the checks pass. Create a signed, annotated tag on that commit. The tag must match the package version, including its `v` prefix:
 
-   ```sh
-   git tag -s -m "Decksical 0.1.3" v0.1.3
-   git push origin v0.1.3
-   ```
+    ```sh
+    git tag -s -m "Decksical 0.1.3" v0.1.3
+    git push origin v0.1.3
+    ```
 
-   Replace `0.1.3` with the version you chose. 
+    Replace `0.1.3` with the version you chose.
 
 3. The Release wheel workflow runs on the tag push. It checks that the tag matches `pyproject.toml`, builds the wheel, tests it in a clean environment, and creates a draft GitHub release with the wheel attached. Rerun the workflow for a transient CI failure. If the tag points to the wrong version or code, correct the version and create a new tag.
 
