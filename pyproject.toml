@@ -22,7 +22,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 
 urls.Repository = "https://github.com/corealization/decksical"
-urls.Documentation = "https://corealization.github.io/decksical/"
+urls.Documentation = "https://decksical.corealization.com"
 urls.Issues = "https://github.com/corealization/decksical/issues"
 
 dependencies = [
