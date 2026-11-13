@@ -94,7 +94,24 @@ The Python checks workflow runs both commands on pushes to `main`.
 
 ## Prepare a release
 
-Set `version` in `pyproject.toml`, update `uv.lock`, and merge the changes. Push a matching tag, such as `v0.1.0`. The release workflow builds and checks the wheel, then creates a draft GitHub release with the wheel attached. Review the draft and publish it when ready. Publish the package to PyPI separately.
+1. Choose the next version and update `version` in `pyproject.toml`. Run `uv lock` to update `uv.lock`, then `uv sync --locked` to verify the lock file matches the project.
+
+2. Commit both files, merge the change to `main`, and make sure the checks pass. Create a signed, annotated tag on that commit. The tag must match the package version, including its `v` prefix:
+
+   ```sh
+   git tag -s -m "Decksical 0.1.3" v0.1.3
+   git push origin v0.1.3
+   ```
+
+   Replace `0.1.3` with the version you chose. 
+
+3. The Release wheel workflow runs on the tag push. It checks that the tag matches `pyproject.toml`, builds the wheel, tests it in a clean environment, and creates a draft GitHub release with the wheel attached. Rerun the workflow for a transient CI failure. If the tag points to the wrong version or code, correct the version and create a new tag.
+
+4. Open the draft release on GitHub. Review the generated Markdown notes, edit the title or notes as needed, and confirm the wheel is attached. Publish the draft when it is ready. Treat the published tag as final; do not move or reuse it for a correction.
+
+5. Publishing the GitHub release starts the Documentation workflow, which builds and deploys the docs from that release's tag. Check that workflow completes.
+
+The release workflow does not automatically publish to PyPI yet. 
 
 ## GitHub Actions
 
