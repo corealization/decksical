@@ -98,7 +98,7 @@ Set `version` in `pyproject.toml`, update `uv.lock`, and merge the changes. Push
 
 ## GitHub Actions
 
-The Documentation workflow builds and publishes the site to GitHub Pages on pushes to `main`. You can also run it manually. The documentation is hosted under the custom domain `docs.corealization.com/decksical` so that hosting arrangements can be changed if needed.
+The Documentation workflow builds and publishes the site to GitHub Pages when a GitHub release is published. It checks out the release tag, so the published docs match that release rather than unreleased changes on `main`. The documentation is hosted under the custom domain `docs.corealization.com/decksical` so that hosting arrangements can be changed if needed.
 
 The Browser tests workflow runs on pushes to `main` with the locked versions. Its daily run at 07:23 UTC tests the latest Zensical and Catppuccin theme releases across both themes, browsers, and Zensical variants. GitHub may delay scheduled runs, and the workflow must be on the default branch.
 
