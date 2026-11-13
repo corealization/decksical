@@ -287,6 +287,21 @@ toggle.name = "Switch to Zensical light"
             page.keyboard.press("n")
             expect(notes).to_be_hidden()
 
+    # A slide marked start_paused waits for the presenter, then resumes autoplay.
+    def test_autoplay_start_paused_waits_for_play(self) -> None:
+        with self.page("autoplay/start-paused/") as page:
+            playback = page.locator(".slide__playback-toggle")
+            expect(playback).to_be_visible()
+            expect(playback).to_have_attribute(
+                "aria-label", "Resume automatic playback",
+            )
+
+            page.wait_for_timeout(1200)
+            expect(page).to_have_url(f"{self.base_url}/autoplay/start-paused/")
+
+            playback.click()
+            expect(page).to_have_url(f"{self.base_url}/autoplay/continue/", timeout=4000)
+
     # Both notes preferences survive a visit to a slide without notes.
     def test_notes_preference_survives_navigation(self) -> None:
         for visible in (False, True):

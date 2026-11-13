@@ -14,6 +14,7 @@ nav = [
   ] },
   { "Overflow" = ["overflow/index.md", "overflow/long.md"] },
   { "Other deck" = ["other/first.md", "other/second.md"] },
+  { "Autoplay deck" = ["autoplay/index.md", "autoplay/start-paused.md", "autoplay/continue.md"] },
 ]
 
 [project.theme]

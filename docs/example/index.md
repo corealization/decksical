@@ -1,9 +1,7 @@
 ---
 icon: lucide/gallery-horizontal-end
-decksical:
-  autoplay:
-    duration: 5
-    wrap: true
+duration: 5
+wrap: true
 ---
 
 # Example slides

@@ -145,6 +145,7 @@ function initializePlayback() {
   playback.active = true;
   playback.duration = duration;
   playback.remaining = duration;
+  if (slide.dataset.autoplayStartPaused === "true") playback.paused = true;
   updatePlaybackControl(slide);
 
   if (!playback.paused) scheduleNextSlide(duration);

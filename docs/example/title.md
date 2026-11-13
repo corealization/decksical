@@ -1,8 +1,7 @@
 ---
 template: slide-title.html
-decksical:
-  autoplay:
-    duration: 10
+duration: 10
+start_paused: true
 ---
 
 ![Decksical logo](../assets/decksical_logo.svg){ .decksical-title-logo }

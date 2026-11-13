@@ -77,9 +77,7 @@ advance automatically after that duration; the final slide stays open.
 
 ```yaml
 ---
-decksical:
-  autoplay:
-    duration: 5
+duration: 5
 ---
 ```
 
@@ -89,9 +87,7 @@ front matter:
 ```yaml
 ---
 template: slide.html
-decksical:
-  autoplay:
-    duration: 15
+duration: 15
 ---
 ```
 
@@ -100,14 +96,26 @@ Use the top-right playback button or press **Space** to pause or resume. The
 button shows a play icon while paused. Without a duration setting, slides use
 manual navigation.
 
+To make a slide, such as a title slide, wait for the presenter to start the
+deck, set `start_paused` in that slide's front matter:
+
+```yaml
+---
+template: slide-title.html
+start_paused: true
+---
+```
+
+The deck still needs an autoplay duration on the deck overview or the slide.
+The playback button starts visible as Play; clicking it or pressing **Space**
+starts automatic advancement.
+
 By default, automatic playback stops on the last slide. To make it return to
 the first slide and continue, set `wrap` in the deck overview's front matter:
 
 ```yaml
-decksical:
-  autoplay:
-    duration: 5
-    wrap: true
+duration: 5
+wrap: true
 ```
 
 This setting affects automatic playback only; the Next arrow still stops at the

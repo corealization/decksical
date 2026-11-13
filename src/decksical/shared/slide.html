@@ -12,29 +12,17 @@ Licensed under the MIT license. See LICENSE in the project root.
 {% endblock %}
 
 {% block content %}
-  {# A slide duration overrides the nearest ancestor index page's deck default.
-     The nested namespace leaves room for more Decksical playback options. #}
-  {% set playback = namespace(duration=none) %}
-  {% set slide_options = page.meta.decksical | default(none) %}
-  {% if slide_options is not none %}
-    {% set slide_autoplay = slide_options.autoplay | default(none) %}
-    {% if slide_autoplay is not none %}
-      {% set playback.duration = slide_autoplay.duration | default(none) %}
-    {% endif %}
-  {% endif %}
+  {# A slide duration overrides the nearest ancestor index page's default. #}
+  {% set playback = namespace(duration=none, start_paused=false) %}
+  {% set playback.duration = page.meta.duration | default(none) %}
+  {% set playback.start_paused = page.meta.start_paused | default(false) %}
   {% if playback.duration is none %}
     {% for ancestor in page.ancestors %}
       {% for child in ancestor.children %}
         {% if playback.duration is none and child.is_index and child.meta.template not in ["slide.html", "slide-title.html"] %}
-          {% set deck_options = child.meta.decksical | default(none) %}
-          {% if deck_options is not none %}
-            {% set deck_autoplay = deck_options.autoplay | default(none) %}
-            {% if deck_autoplay is not none %}
-              {% set deck_duration = deck_autoplay.duration | default(none) %}
-              {% if deck_duration is not none %}
-                {% set playback.duration = deck_duration %}
-              {% endif %}
-            {% endif %}
+          {% set deck_duration = child.meta.duration | default(none) %}
+          {% if deck_duration is not none %}
+            {% set playback.duration = deck_duration %}
           {% endif %}
         {% endif %}
       {% endfor %}
@@ -44,19 +32,17 @@ Licensed under the MIT license. See LICENSE in the project root.
   {% for ancestor in page.ancestors %}
     {% for child in ancestor.children %}
       {% if not wrap.deck_found and child.is_index and child.meta.template not in ["slide.html", "slide-title.html"] %}
-        {% set deck_options = child.meta.decksical | default(none) %}
-        {% if deck_options is not none %}
-          {% set deck_autoplay = deck_options.autoplay | default(none) %}
-          {% if deck_autoplay is not none %}
-            {% set wrap.deck_found = true %}
-            {% set wrap.enabled = deck_autoplay.wrap | default(false) %}
-            {% if wrap.enabled %}
-              {% for sibling in ancestor.children %}
-                {% if wrap.first_slide is none and sibling.meta.template in ["slide.html", "slide-title.html"] %}
-                  {% set wrap.first_slide = sibling.url %}
-                {% endif %}
-              {% endfor %}
-            {% endif %}
+        {% set deck_duration = child.meta.duration | default(none) %}
+        {% set deck_wrap = child.meta.wrap | default(false) %}
+        {% if deck_duration is not none or deck_wrap %}
+          {% set wrap.deck_found = true %}
+          {% set wrap.enabled = deck_wrap %}
+          {% if wrap.enabled %}
+            {% for sibling in ancestor.children %}
+              {% if wrap.first_slide is none and sibling.meta.template in ["slide.html", "slide-title.html"] %}
+                {% set wrap.first_slide = sibling.url %}
+              {% endif %}
+            {% endfor %}
           {% endif %}
         {% endif %}
       {% endif %}
@@ -66,6 +52,7 @@ Licensed under the MIT license. See LICENSE in the project root.
     class="{% block slide_classes %}slide{% endblock %}{% if playback.duration is not none %} slide--autoplay{% endif %}"
     aria-label="Slide"
     data-autoplay-duration="{{ playback.duration if playback.duration is not none else '' }}"
+    {% if playback.start_paused %}data-autoplay-start-paused="true"{% endif %}
   >
     {% if wrap.enabled and wrap.first_slide is not none %}
       <a class="slide__autoplay-wrap" href="{{ wrap.first_slide | url }}" hidden tabindex="-1" aria-hidden="true"></a>

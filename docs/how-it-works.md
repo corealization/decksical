@@ -163,8 +163,9 @@ since the script uses those attributes to find them.
 ## How automatic playback works
 
 The slide template places the resolved duration in a `data-autoplay-duration`
-attribute. A slide's `decksical.autoplay.duration` metadata overrides the value
-on the nearest ancestor index page. Without either value, the slide does not
+attribute. A slide's `duration` metadata overrides the value on the nearest
+ancestor index page. A slide can set `start_paused: true` to wait for the
+presenter to start playback. Without a resolved duration, the slide does not
 auto-advance.
 
 The script schedules one timer for the current slide and resets it when
