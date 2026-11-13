@@ -37,8 +37,10 @@ class PackageTests(unittest.TestCase):
 
                 for resource in [
                     "mkdocs_theme.yml",
+                    "decksical.html",
                     "slide.html",
                     "slide-title.html",
+                    "shared/decksical.html",
                     "shared/slide.html",
                     "assets/slides/slides.css",
                     "assets/slides/slides.mjs",

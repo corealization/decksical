@@ -115,12 +115,25 @@ class SlideTests(unittest.TestCase):
     @classmethod
     def configure_fixture(cls, fixture: Path) -> None:
         config = fixture / "zensical.toml"
-        config.write_text(
+        settings = (
             config.read_text().replace('name = "decksical"', f'name = "{cls.theme_name}"')
             .replace('[project.theme]', f'[project.theme]\nvariant = "{cls.variant}"', 1)
-            .replace('[project]', f'[project]\nsite_url = "{cls.base_url}/"', 1),
-            encoding="utf-8",
+            .replace('[project]', f'[project]\nsite_url = "{cls.base_url}/"', 1)
         )
+        if cls.theme_name == "decksical-catppuccin":
+            settings += '''
+
+[[project.theme.palette]]
+scheme = "default"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Catppuccin Frappé"
+
+[[project.theme.palette]]
+scheme = "catppuccin-frappe"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to Zensical light"
+'''
+        config.write_text(settings, encoding="utf-8")
 
     @classmethod
     def start_browser(cls) -> None:
@@ -526,6 +539,36 @@ class SlideTests(unittest.TestCase):
             code = right.locator("pre code")
             expect(code).to_be_visible()
             expect(code).to_have_text('[project.theme]\nname = "decksical"\n')
+
+    # Switching fixture palettes changes the page's rendered background color.
+    def test_catppuccin_palette_changes_fixture_background(self) -> None:
+        if self.theme_name != "decksical-catppuccin":
+            self.skipTest("Catppuccin palette switching requires the Catppuccin theme")
+
+        with self.page() as page:
+            page.goto(self.base_url, wait_until="networkidle")
+            body = page.locator("body")
+            expect(body).to_have_attribute("data-md-color-scheme", "default")
+            zensical_background = body.evaluate(
+                "element => getComputedStyle(element).backgroundColor",
+            )
+
+            catppuccin_palette = page.locator(
+                'input[data-md-color-scheme="catppuccin-frappe"]',
+            )
+            palette_id = catppuccin_palette.get_attribute("id")
+            self.assertIsNotNone(palette_id)
+            page.locator(f'label[for="{palette_id}"]').click()
+            expect(body).to_have_attribute(
+                "data-md-color-scheme", "catppuccin-frappe",
+            )
+            catppuccin_background = body.evaluate(
+                "element => getComputedStyle(element).backgroundColor",
+            )
+            self.assertNotEqual(
+                zensical_background, catppuccin_background,
+                "Switching to Catppuccin should change the rendered page background",
+            )
 
     # The real documentation renders an ordinary page and a representative image slide.
     def test_documentation_smoke(self) -> None:

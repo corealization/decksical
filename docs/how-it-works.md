@@ -210,6 +210,20 @@ The slide template extends `base.html` directly, so an override of
 `main.html` affects ordinary pages rather than slide pages. A documentation
 project can also use `custom_dir` to override theme files locally.
 
+The Decksical theme provides `decksical.html` as a base for local page
+overrides. It extends Zensical's base and loads the Catppuccin stylesheet when
+the Catppuccin theme is selected. Extend it from any local `main.html` override
+so site-specific block changes, such as the announcement, keep that theme
+setup:
+
+```jinja
+{% extends "decksical.html" %}
+
+{% block announce %}
+  Your announcement here.
+{% endblock %}
+```
+
 Change `slides.mjs` for keyboard shortcuts, automatic playback, and notes
 behavior. Layout is handled by the template and CSS. Preserve the restoration
 after instant navigation when adding state that must follow the current slide.
