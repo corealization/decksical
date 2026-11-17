@@ -113,7 +113,7 @@ class SlideTests(unittest.TestCase):
         build_site(fixture)
 
     @classmethod
-    def configure_fixture(cls, fixture: Path) -> None:
+    def configure_fixture(cls, fixture: Path, dropdown: bool = True) -> None:
         config = fixture / "zensical.toml"
         settings = (
             config.read_text().replace('name = "decksical"', f'name = "{cls.theme_name}"')
@@ -121,17 +121,60 @@ class SlideTests(unittest.TestCase):
             .replace('[project]', f'[project]\nsite_url = "{cls.base_url}/"', 1)
         )
         if cls.theme_name == "decksical-catppuccin":
+            if dropdown:
+                settings = settings.replace(
+                    "[project.theme]",
+                    "[project.extra.decksical.palette]\n"
+                    "dropdown = true\n\n"
+                    "[project.theme]",
+                    1,
+                )
             settings += '''
 
 [[project.theme.palette]]
 scheme = "default"
-toggle.icon = "lucide/moon"
+toggle.icon = "lucide/sun"
 toggle.name = "Switch to Catppuccin Frappé"
 
 [[project.theme.palette]]
 scheme = "catppuccin-frappe"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Catppuccin Macchiato"
+
+[[project.theme.palette]]
+scheme = "catppuccin-macchiato"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Catppuccin Mocha"
+
+[[project.theme.palette]]
+scheme = "catppuccin-mocha"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Zensical dark palette"
+
+[[project.theme.palette]]
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Tokyo Night"
+
+[[project.theme.palette]]
+scheme = "tokyo-night"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Catppuccin Latte"
+
+[[project.theme.palette]]
+scheme = "catppuccin-latte"
+primary = "custom"
+accent = "custom"
 toggle.icon = "lucide/sun"
-toggle.name = "Switch to Zensical light"
+toggle.name = "Switch to Zensical light palette"
 '''
         config.write_text(settings, encoding="utf-8")
 
@@ -573,7 +616,7 @@ toggle.name = "Switch to Zensical light"
             )
             palette_id = catppuccin_palette.get_attribute("id")
             self.assertIsNotNone(palette_id)
-            page.locator(f'label[for="{palette_id}"]').click()
+            page.get_by_label("Select color palette").select_option(palette_id)
             expect(body).to_have_attribute(
                 "data-md-color-scheme", "catppuccin-frappe",
             )
@@ -583,6 +626,112 @@ toggle.name = "Switch to Zensical light"
             self.assertNotEqual(
                 zensical_background, catppuccin_background,
                 "Switching to Catppuccin should change the rendered page background",
+            )
+
+    # The docs palette picker lists the options and keeps in sync with Zensical.
+    def test_palette_picker_lists_and_switches_palettes(self) -> None:
+        if self.theme_name != "decksical-catppuccin":
+            self.skipTest("Palette picker coverage requires the Catppuccin theme")
+
+        with self.page() as page:
+            page.goto(self.base_url, wait_until="networkidle")
+            picker = page.get_by_label("Select color palette")
+            expect(picker).to_be_visible()
+            self.assertCountEqual(picker.locator("option").all_text_contents(), [
+                "Zensical light",
+                "Zensical dark",
+                "Catppuccin Frappé",
+                "Catppuccin Macchiato",
+                "Catppuccin Mocha",
+                "Catppuccin Latte",
+                "Tokyo Night",
+            ])
+
+            tokyo_night_id = page.locator(
+                'input[data-md-color-scheme="tokyo-night"]',
+            ).get_attribute("id")
+            self.assertIsNotNone(tokyo_night_id)
+            picker.select_option(tokyo_night_id)
+            expect(page.locator("body")).to_have_attribute(
+                "data-md-color-scheme", "tokyo-night",
+            )
+
+            page.reload(wait_until="networkidle")
+            expect(picker).to_have_value(tokyo_night_id)
+
+    # Without a palette, the enhancement must leave the page untouched.
+    def test_palette_picker_does_nothing_without_configured_palettes(self) -> None:
+        with self.page() as page:
+            for markup in (
+                "<html><body></body></html>",
+                '<html><body><form data-md-component="palette"></form></body></html>',
+            ):
+                page.set_content(markup)
+                page.add_script_tag(
+                    path=str(
+                        ROOT / "src" / "decksical" / "assets" / "palette-selector.js"
+                    ),
+                )
+                expect(page.locator(".decksical-palette-picker")).to_have_count(0)
+                expect(page.locator(".decksical-palette-enhanced")).to_have_count(0)
+
+    # Omitting the setting preserves the native palette cycle even when palettes exist.
+    def test_palette_dropdown_is_opt_in(self) -> None:
+        if self.theme_name != "decksical-catppuccin":
+            self.skipTest("Palette dropdown configuration requires the Catppuccin theme")
+
+        fixture = self.workdir / "fixture-without-palette-dropdown"
+        copytree(ROOT / "tests" / "fixtures" / "site", fixture)
+        self.configure_fixture(fixture, dropdown=False)
+        fixture_url = f"{self.server_url}/fixture-without-palette-dropdown/site"
+        config = fixture / "zensical.toml"
+        config.write_text(
+            config.read_text().replace(
+                f'site_url = "{self.base_url}/"', f'site_url = "{fixture_url}/"',
+            ),
+            encoding="utf-8",
+        )
+        build_site(fixture)
+
+        with self.page() as page:
+            page.goto(fixture_url, wait_until="networkidle")
+            expect(page.locator(".decksical-palette-picker")).to_have_count(0)
+            catppuccin_palette = page.locator(
+                'input[data-md-color-scheme="catppuccin-frappe"]',
+            )
+            palette_id = catppuccin_palette.get_attribute("id")
+            self.assertIsNotNone(palette_id)
+            cycle_control = page.locator(f'label[for="{palette_id}"]')
+            expect(cycle_control).to_be_visible()
+            cycle_control.click()
+            expect(page.locator("body")).to_have_attribute(
+                "data-md-color-scheme", "catppuccin-frappe",
+            )
+
+    # If the enhancement script is unavailable, Zensical's palette cycle remains usable.
+    def test_palette_cycle_remains_when_picker_script_is_unavailable(self) -> None:
+        if self.theme_name != "decksical-catppuccin":
+            self.skipTest("Palette cycle coverage requires the Catppuccin theme")
+
+        with self.page() as page:
+            page.route(
+                "**/palette-selector.js",
+                lambda route: route.fulfill(
+                    status=200, content_type="application/javascript", body="",
+                ),
+            )
+            page.goto(self.base_url, wait_until="networkidle")
+            expect(page.locator(".decksical-palette-picker")).to_have_count(0)
+            catppuccin_palette = page.locator(
+                'input[data-md-color-scheme="catppuccin-frappe"]',
+            )
+            palette_id = catppuccin_palette.get_attribute("id")
+            self.assertIsNotNone(palette_id)
+            cycle_control = page.locator(f'label[for="{palette_id}"]')
+            expect(cycle_control).to_be_visible()
+            cycle_control.click()
+            expect(page.locator("body")).to_have_attribute(
+                "data-md-color-scheme", "catppuccin-frappe",
             )
 
     # The real documentation renders an ordinary page and a representative image slide.

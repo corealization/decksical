@@ -4,4 +4,20 @@
   {% if config.theme.name == "decksical-catppuccin" %}
     <link rel="stylesheet" href="{{ 'assets/stylesheets/catppuccin.css' | url }}">
   {% endif %}
+  {% set extra_options = config.extra | default(none) %}
+  {% set decksical_options = extra_options.decksical | default(none) if extra_options is not none else none %}
+  {% set palette_options = decksical_options.palette | default(none) if decksical_options is not none else none %}
+  {% if palette_options is not none and palette_options.dropdown | default(false) %}
+    <link rel="stylesheet" href="{{ 'assets/palette-selector.css' | url }}">
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% set extra_options = config.extra | default(none) %}
+  {% set decksical_options = extra_options.decksical | default(none) if extra_options is not none else none %}
+  {% set palette_options = decksical_options.palette | default(none) if decksical_options is not none else none %}
+  {% if palette_options is not none and palette_options.dropdown | default(false) %}
+    <script defer src="{{ 'assets/palette-selector.js' | url }}"></script>
+  {% endif %}
 {% endblock %}

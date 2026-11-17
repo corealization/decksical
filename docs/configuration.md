@@ -62,8 +62,18 @@ variant = "modern" # or "classic"
 Zensical palettes can set the light and dark schemes and provide a palette
 toggle. Add or adjust `[[project.theme.palette]]` entries in the same
 `zensical.toml`; each entry defines a scheme and the label/icon for switching
-to the next one. The documentation site demonstrates this with Zensical,
-Catppuccin, and a custom Tokyo Night palette.
+to the next one. By default, Zensical displays its palette cycle control. To
+replace it with a dropdown, opt in under `project.extra.decksical.palette`:
+
+```toml
+[project.extra.decksical.palette]
+dropdown = true
+```
+
+The dropdown lists all configured palettes and applies site-wide, including on
+ordinary documentation pages as well as slides. Omit the setting or set it to
+`false` to keep Zensical's palette cycle control. The documentation site
+demonstrates this with Zensical, Catppuccin, and a custom Tokyo Night palette.
 
 ## Customize colors with `extra.css`
 
