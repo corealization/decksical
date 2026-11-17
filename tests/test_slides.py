@@ -650,7 +650,7 @@ toggle.name = "Switch to Zensical light palette"
             tokyo_night_id = page.locator(
                 'input[data-md-color-scheme="tokyo-night"]',
             ).get_attribute("id")
-            self.assertIsNotNone(tokyo_night_id)
+            assert tokyo_night_id is not None
             picker.select_option(tokyo_night_id)
             expect(page.locator("body")).to_have_attribute(
                 "data-md-color-scheme", "tokyo-night",

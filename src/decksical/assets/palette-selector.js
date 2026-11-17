@@ -1,3 +1,7 @@
+// Copyright (c) 2026 Alex Voss
+// SPDX-License-Identifier: MIT
+// Licensed under the MIT license. See LICENSE in the project root.
+
 (() => {
   const initializePalettePicker = () => {
     const palette = document.querySelector('[data-md-component="palette"]');
