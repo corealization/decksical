@@ -675,6 +675,31 @@ toggle.name = "Switch to Zensical light palette"
                 expect(page.locator(".decksical-palette-picker")).to_have_count(0)
                 expect(page.locator(".decksical-palette-enhanced")).to_have_count(0)
 
+    # The palette partial provides the dropdown without a local main.html override.
+    def test_palette_dropdown_works_without_main_override(self) -> None:
+        if self.theme_name != "decksical-catppuccin":
+            self.skipTest("Palette dropdown coverage requires the Catppuccin theme")
+
+        fixture = self.workdir / "fixture-without-main-override"
+        copytree(ROOT / "tests" / "fixtures" / "site", fixture)
+        (fixture / "overrides" / "main.html").unlink()
+        self.configure_fixture(fixture)
+        fixture_url = f"{self.server_url}/fixture-without-main-override/site"
+        config = fixture / "zensical.toml"
+        config.write_text(
+            config.read_text().replace(
+                f'site_url = "{self.base_url}/"', f'site_url = "{fixture_url}/"',
+            ),
+            encoding="utf-8",
+        )
+        build_site(fixture)
+
+        with self.page() as page:
+            page.goto(fixture_url, wait_until="networkidle")
+            picker = page.get_by_label("Select color palette")
+            expect(picker).to_be_visible()
+            expect(picker.locator("option")).to_have_count(7)
+
     # Omitting the setting preserves the native palette cycle even when palettes exist.
     def test_palette_dropdown_is_opt_in(self) -> None:
         if self.theme_name != "decksical-catppuccin":

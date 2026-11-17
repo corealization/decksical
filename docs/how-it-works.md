@@ -40,7 +40,8 @@ The theme lives in `src/decksical/`:
 | --- | --- |
 | `__init__.py` | Makes the directory a Python package. It contains no slide processing logic. |
 | [Theme configuration] | Declares `extends: material` so missing templates and assets come from the inherited theme. |
-| [Shared page wrapper] | Extends Zensical's base page and adds the optional palette dropdown to pages that use the wrapper. |
+| [Shared page wrapper] | Extends Zensical's base page and adds the Catppuccin stylesheet to ordinary pages. |
+| [Palette partial] | Preserves Zensical's palette controls and adds the optional dropdown hook. |
 | [Slide template] | Defines the slide page structure and override blocks. |
 | [Content partial] | Separates the rendered Markdown into columns when a marker is present. |
 | [Navigation partial] | Creates previous, overview, and next links within the deck. |
@@ -70,12 +71,12 @@ documentation projects.
 configuration and wrappers live in `src/decksical/catppuccin/`. Its page
 wrapper extends the shared page wrapper; its slide wrapper extends the shared
 slide template and adds Catppuccin's stylesheet. The shared page wrapper loads
-that stylesheet for ordinary pages and conditionally loads the palette selector
-when `project.extra.decksical.palette.dropdown` is true. The selector appears
-on ordinary pages whose local `main.html` override extends `decksical.html`;
-slide pages use a separate template and hide the header. The selected palette
-still affects slides because they share the site's active color scheme. The
-palette selector implementation is shared by both variants.
+that stylesheet for ordinary pages. Decksical overrides Zensical's
+`partials/palette.html` to add the palette selector when
+`project.extra.decksical.palette.dropdown` is true. The selector works
+independently of a local `main.html` override; the selected palette affects
+slides too because they share the site's active color scheme. The selector
+implementation is shared by both variants.
 
 The wheel includes the shared assets and partials in both theme directories.
 Both slide wrappers extend `shared/slide.html`. The common template lives in
@@ -221,8 +222,9 @@ The slide template extends `base.html` directly, so an override of
 project can also use `custom_dir` to override theme files locally.
 
 The Decksical theme provides `decksical.html` as a base for local page
-overrides. It extends Zensical's base and loads the Catppuccin stylesheet and
-optional palette selector. Configuration for local `main.html` overrides is
+overrides. It extends Zensical's base and loads the Catppuccin stylesheet when
+that theme is selected. The palette selector is added through the shared
+`palette.html` partial. Configuration for local `main.html` overrides is
 documented in [Configuration and customization](configuration.md#override-ordinary-documentation-pages).
 
 Change `slides.mjs` for keyboard shortcuts, automatic playback, and notes
@@ -237,6 +239,7 @@ These settings are described in the [authoring instructions].
 [authoring instructions]: authoring.md
 [Content partial]: https://github.com/corealization/decksical/blob/main/src/decksical/partials/slides/content.html
 [Navigation partial]: https://github.com/corealization/decksical/blob/main/src/decksical/partials/slides/navigation.html
+[Palette partial]: https://github.com/corealization/decksical/blob/main/src/decksical/partials/palette.html
 [Palette selector JavaScript]: https://github.com/corealization/decksical/blob/main/src/decksical/assets/palette-selector.js
 [Palette selector stylesheet]: https://github.com/corealization/decksical/blob/main/src/decksical/assets/palette-selector.css
 [Package configuration]: https://github.com/corealization/decksical/blob/main/pyproject.toml

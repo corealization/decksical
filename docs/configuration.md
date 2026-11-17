@@ -82,7 +82,9 @@ Tokyo Night palette.
 
 If your project has a local `main.html` override, make it extend Decksical's
 `decksical.html` template. This preserves Decksical's page setup, including the
-Catppuccin stylesheet and optional palette dropdown:
+Catppuccin stylesheet on ordinary pages when using that variant. The palette
+dropdown is added through Zensical's palette partial and does not depend on a
+local `main.html` override:
 
 ```jinja
 {% extends "decksical.html" %}
