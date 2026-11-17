@@ -40,6 +40,20 @@ template: slide.html
 - Stick to one idea per slide.
 ```
 
+## Create a deck overview
+
+Create `docs/slides/index.md` as a regular documentation page:
+
+```markdown
+# My deck
+
+A short description of the presentation.
+```
+
+This overview is the deck's landing page and return destination. The up-arrow
+and **Escape** return here when leaving a slide. Without it, the up-arrow is
+omitted and **Escape** has no destination.
+
 ## Put the deck in your navigation
 
 In `zensical.toml`, add a section for the deck to your existing `nav` list:
@@ -48,6 +62,7 @@ In `zensical.toml`, add a section for the deck to your existing `nav` list:
 [project]
 nav = [
   { "My deck" = [
+    { "Overview" = "slides/index.md" },
     { "First slide" = "slides/first.md" },
     { "Next slide" = "slides/next.md" },
   ] },

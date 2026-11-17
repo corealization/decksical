@@ -70,10 +70,28 @@ replace it with a dropdown, opt in under `project.extra.decksical.palette`:
 dropdown = true
 ```
 
-The dropdown lists all configured palettes and applies site-wide, including on
-ordinary documentation pages as well as slides. Omit the setting or set it to
-`false` to keep Zensical's palette cycle control. The documentation site
-demonstrates this with Zensical, Catppuccin, and a custom Tokyo Night palette.
+The dropdown lists all configured palettes. The selected palette applies
+site-wide and changes colors on ordinary documentation pages and slides. Omit
+the setting or set it to `false` to keep Zensical's palette cycle control. The
+documentation site demonstrates this with Zensical, Catppuccin, and a custom
+Tokyo Night palette.
+
+## Override ordinary documentation pages
+
+If your project has a local `main.html` override, make it extend Decksical's
+`decksical.html` template. This preserves Decksical's page setup, including the
+Catppuccin stylesheet and optional palette dropdown:
+
+```jinja
+{% extends "decksical.html" %}
+
+{% block announce %}
+  Your announcement here.
+{% endblock %}
+```
+
+See [How the theme works](how-it-works.md#customize-the-theme-source) for how
+the wrapper fits into the theme.
 
 ## Customize colors with `extra.css`
 

@@ -18,9 +18,10 @@ and add JavaScript.
 
 Decksical supports Zensical's modern and classic theme variants. It also has an
 optional Catppuccin variant, which inherits from the `catppuccin-zensical`
-theme. Each variant adds a slide template and assets; ordinary documentation
-pages use the inherited templates. A page becomes a slide when its front
-matter selects `slide.html`:
+theme. Each variant provides wrappers and slide assets. Ordinary documentation
+pages use Zensical's inherited templates unless a local `main.html` override
+extends Decksical's `decksical.html` wrapper. A page becomes a slide when its
+front matter selects `slide.html`:
 
 ```
 ---
@@ -39,11 +40,14 @@ The theme lives in `src/decksical/`:
 | --- | --- |
 | `__init__.py` | Makes the directory a Python package. It contains no slide processing logic. |
 | [Theme configuration] | Declares `extends: material` so missing templates and assets come from the inherited theme. |
+| [Shared page wrapper] | Extends Zensical's base page and adds the optional palette dropdown to pages that use the wrapper. |
 | [Slide template] | Defines the slide page structure and override blocks. |
 | [Content partial] | Separates the rendered Markdown into columns when a marker is present. |
 | [Navigation partial] | Creates previous, overview, and next links within the deck. |
 | [Slide stylesheet] | Sets the presentation layout, image sizing, notes visibility, and print styles. |
 | [Slide JavaScript] | Handles keyboard navigation, automatic playback, and notes visibility. |
+| [Palette selector stylesheet] | Styles the optional palette dropdown and preserves the native cycle control until enhancement initializes. |
+| [Palette selector JavaScript] | Builds the dropdown from Zensical's configured palette controls when enabled. |
 
 The repository's [Package configuration] registers the package through the
 `mkdocs.themes` entry point:
@@ -63,11 +67,15 @@ documentation projects.
 
 `decksical-catppuccin` inherits the `catppuccin` theme from the optional
 [`catppuccin-zensical` package](installation.md#use-with-catppuccin). Its
-configuration and slide wrapper live in
-`src/decksical/catppuccin/`.
-The slide wrapper extends the shared slide template and adds Catppuccin's
-stylesheet in the `styles` block. This stylesheet is only loaded by the
-Catppuccin variant, which adds no JavaScript of its own.
+configuration and wrappers live in `src/decksical/catppuccin/`. Its page
+wrapper extends the shared page wrapper; its slide wrapper extends the shared
+slide template and adds Catppuccin's stylesheet. The shared page wrapper loads
+that stylesheet for ordinary pages and conditionally loads the palette selector
+when `project.extra.decksical.palette.dropdown` is true. The selector appears
+on ordinary pages whose local `main.html` override extends `decksical.html`;
+slide pages use a separate template and hide the header. The selected palette
+still affects slides because they share the site's active color scheme. The
+palette selector implementation is shared by both variants.
 
 The wheel includes the shared assets and partials in both theme directories.
 Both slide wrappers extend `shared/slide.html`. The common template lives in
@@ -212,18 +220,9 @@ The slide template extends `base.html` directly, so an override of
 project can also use `custom_dir` to override theme files locally.
 
 The Decksical theme provides `decksical.html` as a base for local page
-overrides. It extends Zensical's base and loads the Catppuccin stylesheet when
-the Catppuccin theme is selected. Extend it from any local `main.html` override
-so site-specific block changes, such as the announcement, keep that theme
-setup:
-
-```jinja
-{% extends "decksical.html" %}
-
-{% block announce %}
-  Your announcement here.
-{% endblock %}
-```
+overrides. It extends Zensical's base and loads the Catppuccin stylesheet and
+optional palette selector. Configuration for local `main.html` overrides is
+documented in [Configuration and customization](configuration.md#override-ordinary-documentation-pages).
 
 Change `slides.mjs` for keyboard shortcuts, automatic playback, and notes
 behavior. Layout is handled by the template and CSS. Preserve the restoration
@@ -237,7 +236,10 @@ These settings are described in the [authoring instructions].
 [authoring instructions]: authoring.md
 [Content partial]: https://github.com/corealization/decksical/blob/main/src/decksical/partials/slides/content.html
 [Navigation partial]: https://github.com/corealization/decksical/blob/main/src/decksical/partials/slides/navigation.html
+[Palette selector JavaScript]: https://github.com/corealization/decksical/blob/main/src/decksical/assets/palette-selector.js
+[Palette selector stylesheet]: https://github.com/corealization/decksical/blob/main/src/decksical/assets/palette-selector.css
 [Package configuration]: https://github.com/corealization/decksical/blob/main/pyproject.toml
+[Shared page wrapper]: https://github.com/corealization/decksical/blob/main/src/decksical/shared/decksical.html
 [Slide JavaScript]: https://github.com/corealization/decksical/blob/main/src/decksical/assets/slides/slides.mjs
 [Slide stylesheet]: https://github.com/corealization/decksical/blob/main/src/decksical/assets/slides/slides.css
 [Slide template]: https://github.com/corealization/decksical/blob/main/src/decksical/shared/slide.html
