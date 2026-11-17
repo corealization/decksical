@@ -198,6 +198,8 @@ notes, how their visibility is remembered, and what your audience can see.
 
 ## Add a deck overview
 
-The up arrow returns to the nearest index page above the slide in the site
-navigation. Add an `index.md` page to the deck's navigation section to provide
-an overview. The arrow is absent when no ancestor section has an index page.
+Include an `index.md` overview page in every deck's navigation section, before
+the slides. It is an ordinary documentation page that serves as the deck's
+landing page and return destination. The up-arrow and **Escape** return to it.
+Without an overview, Previous and Next still work, but the up-arrow is absent
+and **Escape** has no destination.

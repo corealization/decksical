@@ -160,8 +160,9 @@ It adds previous and next links only when the adjacent sibling also selects
 Slides do not need a separate deck identifier in their front matter.
 
 The overview link points to the nearest ancestor section's non-slide index
-page. It is omitted when no such index exists. The links use Lucide icons
-included from the inherited theme's `.icons/lucide/` directory.
+page. Decks should always provide this page; if it is absent, the template
+omits the return link. The links use Lucide icons included from the inherited
+theme's `.icons/lucide/` directory.
 
 The Left and Right keyboard handlers click these same links. If you change
 how the template chooses adjacent slides, keyboard navigation follows the

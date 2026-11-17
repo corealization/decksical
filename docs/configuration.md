@@ -28,10 +28,12 @@ nav = [
 ]
 ```
 
-Each slide page selects `slide.html` in its front matter. The `index.md`
-overview is an ordinary documentation page; it gives the deck an entry point
-and lets the up-arrow or **Escape** return to it. Without an overview, the
-up-arrow is hidden. See [Authoring: add a deck overview](authoring.md#add-a-deck-overview).
+Each slide page selects `slide.html` in its front matter. Include an `index.md`
+overview as the first page in every deck section. It is an ordinary
+documentation page that provides the deck's landing and return destination for
+the up-arrow and **Escape**. Without one, Previous and Next still work, but the
+up-arrow is hidden and Escape has no destination. See
+[Authoring: add a deck overview](authoring.md#add-a-deck-overview).
 
 ## Configure slide navigation
 

@@ -21,15 +21,17 @@ If you are previewing this repository itself, follow the
 | --- | --- |
 | **Right arrow** or the next button | Next slide |
 | **Left arrow** or the previous button | Previous slide |
-| **Escape** or the up-arrow button | Deck overview, when configured |
+| **Escape** or the up-arrow button | Return to the deck overview |
 | Top-right playback button or **Space** | Pause or resume automatic playback, when enabled |
 | **N** | Show or hide speaker notes |
 
 Previous and Next stay within the deck's navigation section. They stop at
 the first and last slides; they do not wrap around or jump into another deck.
-Escape or the up-arrow button returns to the closest deck overview. Add an
-`index.md` page to your deck section to create one. See
-[Add a deck overview](authoring.md#add-a-deck-overview) for details.
+Escape or the up-arrow button returns to the closest deck overview. Include an
+`index.md` page in every deck section as its landing and return destination.
+Previous and Next still work without an overview, but Escape and the up-arrow
+have nowhere to return to. See [Add a deck overview](authoring.md#add-a-deck-overview)
+for details.
 
 To configure the slide navigation arrows and other project settings, see
 [Configuration and customization](configuration.md#configure-slide-navigation).
