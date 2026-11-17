@@ -12,6 +12,7 @@ repo_name = "corealization/decksical"
 nav = [
   { "Home" = "index.md" },
   { "Installation" = "installation.md" },
+  { "Configuration and customization" = "configuration.md" },
   { "Get started" = "getting-started.md" },
   { "Authoring" = "authoring.md" },
   { "Presenting" = "presenting.md" },
@@ -22,6 +23,7 @@ nav = [
     { "Make your own deck" = "example/closing.md" },
     { "Author a slide" = "example/content.md" },
     { "Code blocks" = "example/code.md" },
+    { "Common admonitions" = "example/admonitions.md" },
     { "Mermaid diagrams" = "example/diagrams.md" },
     { "Full-size image" = "example/image.md" },
     { "Image on the left" = "example/image-text.md" },
@@ -80,7 +82,8 @@ features = [
   # "toc.integrate",
 ]
 
-# Cycle through Catppuccin's flavors and Zensical's light and dark palettes.
+# Cycle through Catppuccin's flavors and the Zensical palettes, including the
+# Tokyo Night custom color scheme defined in extra.css.
 [[project.theme.palette]]
 scheme = "catppuccin-latte"
 primary = "custom"
@@ -116,6 +119,13 @@ toggle.name = "Switch to Zensical dark palette"
 
 [[project.theme.palette]]
 scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to Tokyo Night"
+
+[[project.theme.palette]]
+scheme = "tokyo-night"
+primary = "custom"
+accent = "custom"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to Catppuccin Latte"
 

@@ -91,10 +91,11 @@ duration: 15
 ---
 ```
 
-The example deck uses a 5-second default and gives its opening slide 15 seconds.
-Use the top-right playback button or press **Space** to pause or resume. The
-button shows a play icon while paused. Without a duration setting, slides use
-manual navigation.
+The example deck demonstrates a deck-wide duration with an override on its
+opening title slide. That slide also sets `start_paused: true`, so playback
+waits for the presenter to start it. Use the top-right playback button or press
+**Space** to pause or resume. The button shows a play icon while paused.
+Without a duration setting, slides use manual navigation.
 
 To make a slide, such as a title slide, wait for the presenter to start the
 deck, set `start_paused` in that slide's front matter:

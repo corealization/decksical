@@ -52,4 +52,7 @@ template: slide.html
 3. Use the [authoring reference](authoring.md) for layouts and speaker notes.
 4. Read [Presenting](presenting.md) for navigation, notes, and printing.
 
+For site navigation, theme palettes, and CSS customization, see
+[Configuration and customization](configuration.md).
+
 Explore the [example deck](example/index.md) to see more layouts.

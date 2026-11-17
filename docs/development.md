@@ -109,13 +109,18 @@ The Python checks workflow runs both commands on pushes to `main`.
 
 4. Open the draft release on GitHub. Review the generated Markdown notes, edit the title or notes as needed, and confirm the wheel is attached. Publish the draft when it is ready. Treat the published tag as final; do not move or reuse it for a correction.
 
-5. Publishing the GitHub release starts the Documentation workflow, which builds and deploys the docs from that release's tag. Check that workflow completes.
+5. Publishing the GitHub release starts the Documentation workflow, which builds and deploys the docs from that release's tag. The workflow checks that the release commit is reachable from `main`. Check that the deployment completes.
 
 The release workflow does not automatically publish to PyPI yet. 
 
 ## GitHub Actions
 
-The Documentation workflow builds and publishes the site to GitHub Pages when a GitHub release is published. It checks out the release tag, so the published docs match that release rather than unreleased changes on `main`. The documentation is hosted under the custom domain `docs.corealization.com/decksical` so that hosting arrangements can be changed if needed.
+The Documentation workflow has two deployment paths:
+
+- Publishing a GitHub release builds and deploys the docs from its tag, after checking that the tagged commit is reachable from `main`. This publishes documentation for that release.
+- For documentation changes between releases, run **Documentation** manually from **Actions** and select `main`. This builds and deploys the current docs on `main`; it does not create a release or tag.
+
+The workflow only permits manual deployments from `main`. The `github-pages` environment must allow the `main` branch and version tags such as `v0.1.3`. The site is hosted at `https://decksical.corealization.com`.
 
 The Browser tests workflow runs on pushes to `main` with the locked versions. Its daily run at 07:23 UTC tests the latest Zensical and Catppuccin theme releases across both themes, browsers, and Zensical variants. GitHub may delay scheduled runs, and the workflow must be on the default branch.
 

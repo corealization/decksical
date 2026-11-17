@@ -31,16 +31,8 @@ Escape or the up-arrow button returns to the closest deck overview. Add an
 `index.md` page to your deck section to create one. See
 [Add a deck overview](authoring.md#add-a-deck-overview) for details.
 
-To hide the navigation arrows until the pointer moves over their area, enable
-this project option in `zensical.toml`:
-
-```toml
-[project.extra.decksical.navigation]
-hide_until_hover = true
-```
-
-The arrows also appear when reached by keyboard focus. They stay visible on
-touch devices.
+To configure the slide navigation arrows and other project settings, see
+[Configuration and customization](configuration.md#configure-slide-navigation).
 
 Shortcuts leave inputs, editable content, and media controls alone. They also
 ignore keys pressed with Shift, Ctrl, Alt, or Command. Click outside those

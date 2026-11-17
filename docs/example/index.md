@@ -11,6 +11,7 @@ wrap: true
 - [Make your own deck](closing.md)
 - [Author a slide](content.md)
 - [Code blocks](code.md)
+- [Common admonitions](admonitions.md)
 - [Mermaid diagrams](diagrams.md)
 - [Full-size image](image.md)
 - [Image on the left](image-text.md)
@@ -19,9 +20,9 @@ wrap: true
 - [Use maths](maths.md)
 - [Speaker notes](notes.md)
 
-This deck advances automatically: the welcome slide stays for 15 seconds, and
-the others stay for 5. After the final slide, it returns to Welcome. Press
-**Space** or use the top-right button to pause or resume.
+This deck demonstrates automatic playback with a paused title slide and a
+deck-wide duration. After the final slide, it returns to the title slide.
+Press **Space** or use the top-right button to start, pause, or resume playback.
 
 ## Edit the presentation
 
