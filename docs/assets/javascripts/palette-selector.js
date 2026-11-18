@@ -16,28 +16,6 @@
       return;
     }
 
-    const stylesheetUrl = palette.dataset.decksicalPaletteStylesheet;
-    if (!stylesheetUrl) {
-      return;
-    }
-
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.href = stylesheetUrl;
-    stylesheet.addEventListener("load", () => enhancePalette(palette, radios), {
-      once: true,
-    });
-    stylesheet.addEventListener("error", () => stylesheet.remove(), {
-      once: true,
-    });
-    document.head.append(stylesheet);
-  };
-
-  const enhancePalette = (palette, radios) => {
-    if (palette.classList.contains("decksical-palette-enhanced")) {
-      return;
-    }
-
     const labels = new Map(
       Array.from(palette.querySelectorAll("label[for]"), (label) => [
         label.htmlFor,

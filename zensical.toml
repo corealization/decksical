@@ -38,12 +38,10 @@ nav = [
 
 extra_css = ["assets/stylesheets/extra.css"]
 extra_javascript = [
+  "assets/javascripts/palette-selector.js",
   "assets/javascripts/mathjax.js",
   "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
 ]
-
-[project.extra.decksical.palette]
-dropdown = true
 
 [project.extra.decksical.navigation]
 hide_until_hover = true

@@ -113,22 +113,32 @@ class SlideTests(unittest.TestCase):
         build_site(fixture)
 
     @classmethod
-    def configure_fixture(cls, fixture: Path, dropdown: bool = True) -> None:
+    def configure_fixture(cls, fixture: Path, palette_picker: bool = True) -> None:
         config = fixture / "zensical.toml"
         settings = (
             config.read_text().replace('name = "decksical"', f'name = "{cls.theme_name}"')
             .replace('[project.theme]', f'[project.theme]\nvariant = "{cls.variant}"', 1)
             .replace('[project]', f'[project]\nsite_url = "{cls.base_url}/"', 1)
         )
+        if palette_picker and cls.theme_name == "decksical-catppuccin":
+            settings = settings.replace(
+                "[project]\n",
+                '[project]\nextra_css = ["assets/stylesheets/extra.css"]\n'
+                'extra_javascript = ["assets/javascripts/palette-selector.js"]\n',
+                1,
+            )
+            assets = fixture / "docs" / "assets"
+            (assets / "stylesheets").mkdir(parents=True, exist_ok=True)
+            (assets / "javascripts").mkdir(parents=True, exist_ok=True)
+            copy2(
+                ROOT / "docs" / "assets" / "stylesheets" / "extra.css",
+                assets / "stylesheets" / "extra.css",
+            )
+            copy2(
+                ROOT / "docs" / "assets" / "javascripts" / "palette-selector.js",
+                assets / "javascripts" / "palette-selector.js",
+            )
         if cls.theme_name == "decksical-catppuccin":
-            if dropdown:
-                settings = settings.replace(
-                    "[project.theme]",
-                    "[project.extra.decksical.palette]\n"
-                    "dropdown = true\n\n"
-                    "[project.theme]",
-                    1,
-                )
             settings += '''
 
 [[project.theme.palette]]
@@ -669,13 +679,13 @@ toggle.name = "Switch to Zensical light palette"
                 page.set_content(markup)
                 page.add_script_tag(
                     path=str(
-                        ROOT / "src" / "decksical" / "assets" / "palette-selector.js"
+                        ROOT / "docs" / "assets" / "javascripts" / "palette-selector.js"
                     ),
                 )
                 expect(page.locator(".decksical-palette-picker")).to_have_count(0)
                 expect(page.locator(".decksical-palette-enhanced")).to_have_count(0)
 
-    # The palette partial provides the dropdown without a local main.html override.
+    # The docs-site script provides the dropdown without a local main.html override.
     def test_palette_dropdown_works_without_main_override(self) -> None:
         if self.theme_name != "decksical-catppuccin":
             self.skipTest("Palette dropdown coverage requires the Catppuccin theme")
@@ -700,14 +710,14 @@ toggle.name = "Switch to Zensical light palette"
             expect(picker).to_be_visible()
             expect(picker.locator("option")).to_have_count(7)
 
-    # Omitting the setting preserves the native palette cycle even when palettes exist.
-    def test_palette_dropdown_is_opt_in(self) -> None:
+    # Decksical projects keep Zensical's native palette cycle by default.
+    def test_palette_dropdown_is_docs_only(self) -> None:
         if self.theme_name != "decksical-catppuccin":
             self.skipTest("Palette dropdown configuration requires the Catppuccin theme")
 
         fixture = self.workdir / "fixture-without-palette-dropdown"
         copytree(ROOT / "tests" / "fixtures" / "site", fixture)
-        self.configure_fixture(fixture, dropdown=False)
+        self.configure_fixture(fixture, palette_picker=False)
         fixture_url = f"{self.server_url}/fixture-without-palette-dropdown/site"
         config = fixture / "zensical.toml"
         config.write_text(

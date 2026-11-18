@@ -64,27 +64,18 @@ variant = "modern" # or "classic"
 Zensical palettes can set the light and dark schemes and provide a palette
 toggle. Add or adjust `[[project.theme.palette]]` entries in the same
 `zensical.toml`; each entry defines a scheme and the label/icon for switching
-to the next one. By default, Zensical displays its palette cycle control. To
-replace it with a dropdown, opt in under `project.extra.decksical.palette`:
-
-```toml
-[project.extra.decksical.palette]
-dropdown = true
-```
-
-The dropdown lists all configured palettes. The selected palette applies
-site-wide and changes colors on ordinary documentation pages and slides. Omit
-the setting or set it to `false` to keep Zensical's palette cycle control. The
-documentation site demonstrates this with Zensical, Catppuccin, and a custom
-Tokyo Night palette.
+to the next one. Zensical displays its palette cycle control by default. The
+Decksical documentation replaces that control with a dropdown so readers can
+choose directly from its many theme examples. This is a docs-site customization
+loaded through `extra_javascript`; Decksical projects keep Zensical's standard
+control. The selected palette applies site-wide, including ordinary pages and
+slides.
 
 ## Override ordinary documentation pages
 
 If your project has a local `main.html` override, make it extend Decksical's
 `decksical.html` template. This preserves Decksical's page setup, including the
-Catppuccin stylesheet on ordinary pages when using that variant. The palette
-dropdown is added through Zensical's palette partial and does not depend on a
-local `main.html` override:
+Catppuccin stylesheet on ordinary pages when using that variant:
 
 ```jinja
 {% extends "decksical.html" %}
