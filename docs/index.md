@@ -18,8 +18,6 @@ Markdown Slides with Zensical
 
 <div markdown>
 
-### Write Markdown
-
 ```
 ---
 template: slide.html
@@ -28,18 +26,18 @@ template: slide.html
 # One idea per slide
 
 - Write in **Markdown**.
-- Organize slides in a folder that suits your project.
 - Add speaker notes when you need them.
+
+<!-- column-break -->
+
+![A diagram showing the path from Markdown through Zensical to a presentation.](../assets/example-process.svg)
 ```
 
 </div>
 
 <div markdown>
 
-### Present the slide
-
-![Rendered slide titled One idea per slide, with three bullet points and navigation arrows.](assets/slide-example.png#only-light)
-![Rendered slide titled One idea per slide, with three bullet points and navigation arrows.](assets/slide-example-dark.png#only-dark)
+![Rendered dark slide titled One idea per slide, with text, a workflow diagram, and navigation arrows.](assets/slide-example-dark.png)
 
 </div>
 
